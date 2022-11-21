@@ -26,41 +26,69 @@ fetch('http://localhost:3000/api/products/' + id)
   //    baliseColors.appendChild(color)
   //   }
 
-  product.colors.forEach((color, i) => {
-   color = document.createElement('option')
-   color.setAttribute('value', product.colors[i])
-   color.innerHTML = product.colors[i]
-   baliseColors.appendChild(color)
+  product.colors.forEach((color) => {
+   let baliseColor = document.createElement('option')
+   baliseColor.setAttribute('value', color)
+   baliseColor.innerHTML = color
+   baliseColors.appendChild(baliseColor)
   })
  })
 
 const button = document.querySelector('#addToCart')
+const color = document.querySelector('#colors')
+const quantity = document.querySelector('#quantity')
 
 button.addEventListener('click', (event) => {
  event.preventDefault()
 
- const color = document.querySelector('#colors')
- const quantity = document.querySelector('#quantity')
-
- let optionsProduct = {
-  id: id,
-  color: color.value,
-  quantity: quantity.value,
+ if (color.value === '') {
+  alert('Veuillez choisir une couleur')
+ } else if (quantity.value == 0) {
+  alert('Quantité minimale : 1')
+ } else if (quantity.value > 100) {
+  alert('La quantité maximale fixée à 100')
+ } else if (quantity.value > 0 && quantity.value < 100) {
+  var optionsProduct = {
+   id: id,
+   color: color.value,
+   quantity: parseInt(quantity.value),
+  }
+  console.log(optionsProduct)
+  addBasket(optionsProduct)
+  alert('Le panier a bien été mis à jour')
  }
- console.log(optionsProduct)
 
- let getBasket = JSON.parse(localStorage.getItem('basket'))
-
- const addProduct = () => {
-  getBasket.push(optionsProduct)
-  localStorage.setItem('basket', JSON.stringify(getBasket))
+ function setBasket(basket) {
+  localStorage.setItem('basket', JSON.stringify(basket))
  }
 
- if (getBasket) {
-  addProduct()
- } else {
-  getBasket = []
-  addProduct()
-  console.log(getBasket)
+ function getBasket() {
+  let basket = localStorage.getItem('basket')
+  if (basket == null) {
+   return []
+  } else {
+   return JSON.parse(basket)
+  }
+ }
+
+ function addBasket(optionsProduct) {
+  let basket = getBasket()
+  let temoin = false
+
+  basket.forEach(function (oneProduct, index) {
+   console.log('forEach')
+   console.log(oneProduct)
+   console.log(index)
+   if (oneProduct.id == optionsProduct.id && oneProduct.color == optionsProduct.color) {
+    basket[index].quantity = parseInt(basket[index].quantity) + parseInt(optionsProduct.quantity)
+    setBasket(basket)
+    temoin = true
+   }
+  })
+
+  if (temoin == false) {
+   basket.push(optionsProduct)
+   setBasket(basket)
+  }
  }
 })
