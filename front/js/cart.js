@@ -5,7 +5,7 @@ let products = []
 
 
 
-basket.forEach(function(product) {
+basket.forEach(function(product, index) {
     console.log('forEach');
     console.log(basket);
     console.log(product);
@@ -87,6 +87,10 @@ basket.forEach(function(product) {
             baliseInputQuantity.setAttribute("value", quantity);
             baliseDivQuantity.appendChild(baliseInputQuantity);
             
+			// let newValue = baliseInputQuantity.value
+
+			// basket[index].quantity = newValue ;
+
             let baliseDivDelete = document.createElement("div");
             baliseDivDelete.className = ("cart__item__content__settings__delete");
             baliseDivContentSetting.appendChild(baliseDivDelete);
@@ -95,6 +99,18 @@ basket.forEach(function(product) {
             baliseParagraphDelete.className = ("deleteItem");
             baliseParagraphDelete.innerText = "Supprimer";
             baliseDivDelete.appendChild(baliseParagraphDelete);
+
+			baliseParagraphDelete.addEventListener('click', function(event) {
+				event.preventDefault();
+
+				basket.splice(index, 1)
+
+				setLocalStorage(basket)
+
+				location.reload();
+			});
+
+			
 
             function getTotalPrice(){
                 let totalPrice = 0;
@@ -113,31 +129,21 @@ basket.forEach(function(product) {
                 totalQuantityDisplay.innerText = totalQuantity;
             }
 
-            removeFromBasket = (product) => {
-    
-	            baliseParagraphDelete.addEventListener('click', (e) => { 
-                e.preventDefault();
-	            console.log('yes');
-                console.log(baliseParagraphDelete);
 
-	            basket = basket.filter(p => p.id != product.id)
-                console.log(id);
-                console.log(product.id);
-                localStorage.setItem('basket', JSON.stringify(basket))
+           
 
-	        })
-            }
-
-            removeFromBasket(product);
-    })
-    .catch(function(error){
-        console.error(error);
-	})      
+            
+    	})
+    	.catch(function(error){
+        	console.error(error);
+		})      
 })
 
 
 
-        
+        function setLocalStorage(newBasket) {
+	localStorage.setItem('basket', JSON.stringify(newBasket))
+}
       
 
         
