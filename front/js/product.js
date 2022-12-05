@@ -19,12 +19,6 @@ fetch('http://localhost:3000/api/products/' + id)
   price.innerHTML = product.price
   description.innerHTML = product.description
 
-  //   for (let i = 0; i < product.colors.length; i++) {
-  //    let color = document.createElement('option')
-  //    color.setAttribute('value', product.colors[i])
-  //    color.innerHTML = product.colors[i]
-  //    baliseColors.appendChild(color)
-  //   }
 
   product.colors.forEach((color) => {
    let baliseColor = document.createElement('option')
@@ -33,6 +27,10 @@ fetch('http://localhost:3000/api/products/' + id)
    baliseColors.appendChild(baliseColor)
   })
  })
+
+.catch(function(error){
+        	console.error(error);
+})   
 
 const button = document.querySelector('#addToCart')
 const color = document.querySelector('#colors')

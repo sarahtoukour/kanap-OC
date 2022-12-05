@@ -1,9 +1,9 @@
 var baliseItems = document.querySelector("#items");
 
 fetch("http://localhost:3000/api/products")
-  .then((res) => res.json())
-  .then((products) => {
-    // console.log(products);
+    .then((res) => res.json())
+    .then((products) => {
+      // console.log(products);
 
     products.forEach((product) => {
       // console.log(product);

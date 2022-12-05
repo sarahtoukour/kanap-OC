@@ -1,32 +1,32 @@
 document.title = "Panier";
-var baliseCartItems = document.getElementById('cart__items')
-var basket = JSON.parse(localStorage.getItem('basket') || "[]");
-let products = []
+var baliseCartItems = document.getElementById("cart__items")
+var basket = JSON.parse(localStorage.getItem("basket") || "[]");
+var products = [];
 
 
 
 basket.forEach(function(product, index) {
-    console.log('forEach');
-    console.log(basket);
-    console.log(product);
+    // console.log('forEach');
+    // console.log(basket);
+    // console.log(product);
 
     let id = product.id;
     let color = product.color;
     let quantity = product.quantity;  
 
-    console.log(product.id);
-    console.log(product.color);
-    console.log(product.quantity);
+    // console.log(product.id);
+    // console.log(product.color);
+    // console.log(product.quantity);
 
     fetch ("http://localhost:3000/api/products/" + id)
         .then((res) => res.json())
         .then((product) => {
-            console.log(product);
+            // console.log(product);
 
             const productInfo = {id: id, color: color, quantity: quantity, name: product.name, price: product.price, img: product.imageUrl, alt: product.altTxt};   
 
-            console.log(productInfo);
-            console.log(product.name);
+            // console.log(productInfo);
+            // console.log(product.name);
 
             products.push(productInfo);
             getTotalPrice()
@@ -40,12 +40,12 @@ basket.forEach(function(product, index) {
             let baliseDivImg = document.createElement('div');
             baliseDivImg.className = "cart__item__img";
             baliseArticle.appendChild(baliseDivImg);
-            
+
             let baliseImg = document.createElement('img');
             baliseImg.setAttribute("src", product.imageUrl);
             baliseImg.setAttribute("alt", product.altTxt);
             baliseDivImg.appendChild(baliseImg);
-            
+
             let baliseDivContent = document.createElement('div');
             baliseDivContent.className = ("cart__item__content");
             baliseArticle.appendChild(baliseDivContent);
@@ -86,10 +86,6 @@ basket.forEach(function(product, index) {
             baliseInputQuantity.setAttribute("max", "100");
             baliseInputQuantity.setAttribute("value", quantity);
             baliseDivQuantity.appendChild(baliseInputQuantity);
-            
-			// let newValue = baliseInputQuantity.value
-
-			// basket[index].quantity = newValue ;
 
             let baliseDivDelete = document.createElement("div");
             baliseDivDelete.className = ("cart__item__content__settings__delete");
@@ -100,17 +96,6 @@ basket.forEach(function(product, index) {
             baliseParagraphDelete.innerText = "Supprimer";
             baliseDivDelete.appendChild(baliseParagraphDelete);
 
-			baliseParagraphDelete.addEventListener('click', function(event) {
-				event.preventDefault();
-
-				basket.splice(index, 1)
-
-				setLocalStorage(basket)
-
-				location.reload();
-			});
-
-			
 
             function getTotalPrice(){
                 let totalPrice = 0;
@@ -119,32 +104,195 @@ basket.forEach(function(product, index) {
                 let totalPriceDisplay = document.getElementById("totalPrice");
 
                 products.forEach (function(product) {
-                    console.log(product);
                     totalPrice += product.price * product.quantity;
-                    console.log(product.price);
+                    // console.log(totalPrice);
                     totalQuantity += product.quantity;
+                    // console.log(totalQuantity);
                 });
     
                 totalPriceDisplay.innerText = totalPrice;
                 totalQuantityDisplay.innerText = totalQuantity;
             }
-
-
-           
-
             
+
+            baliseInputQuantity.addEventListener('change', function() {
+                let newValue = baliseInputQuantity.value
+                
+                if (newValue <= 0 || newValue > 100 || isNaN(quantity)){
+                  alert ("Merci de sélectionner une quantité valide.");          
+                }
+                else {
+                  basket[index].quantity = parseInt(newValue);
+                  getTotalPrice();
+                  console.log(newValue);
+                  setLocalStorage(basket);
+                  location.reload();
+                }
+                
+            })
+			
+
+			baliseParagraphDelete.addEventListener('click', function(event) {
+				event.preventDefault();
+				basket.splice(index, 1);
+				setLocalStorage(basket);
+				location.reload();
+			});
     	})
     	.catch(function(error){
         	console.error(error);
-		})      
+		  })      
 })
 
 
 
-        function setLocalStorage(newBasket) {
-	localStorage.setItem('basket', JSON.stringify(newBasket))
+function setLocalStorage(newBasket) {
+    localStorage.setItem('basket', JSON.stringify(newBasket))
 }
-      
 
+
+
+
+const firstName = document.getElementById("firstName");
+const lastName = document.getElementById("lastName");
+const address = document.getElementById("address");
+const city = document.getElementById("city");
+const email = document.getElementById("email");
+
+const order = document.getElementById("order");
+
+
+const firstNameRegex = /^[A-Z a-zé]{3,15}[-]?[A-Z a-zé]{0,10}$/;
+const lastNameRegex = /^[A-Z ]{3,15}[-]?[A-Z ]{0,10}$/;
+const addressRegex = /^[0-9]{1,3},[a-zA-Z0-9\s\,\''\-]*$/;
+const cityRegex = /^[A-ZÉÀ a-zéèàôâ']{3,15}[-]?[A-ZÉÀ a-zéèàôâ']{0,10}[-]?[A-ZÉÀ a-zéèàôâ']{0,10}$/;
+const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+let correct = {
+  firstName: false,
+  lastName: false,
+  address: false,
+  city: false,
+  email: false,
+
+}
+
+function formValidation() {
+  firstName.addEventListener("input", function (e) {
+    let inputValid = firstNameRegex.test(e.target.value);
+    if (inputValid === false) {
+      document.getElementById("firstNameErrorMsg").textContent = "Entre 3 et 15 caractères, sans chiffres ni symboles.";
+      correct.firstName = false;
+    } else {
+      correct.firstName = true;
+      document.getElementById("firstNameErrorMsg").textContent = "";
+    }
+  });
+
+  lastName.addEventListener("input", function (e) {
+    let inputValid = lastNameRegex.test(e.target.value);
+    if (inputValid === false) {
+      document.getElementById("lastNameErrorMsg").textContent = "Entre 3 et 15 caractères, sans chiffres ni symboles.";
+      correct.lastName = false;
+    } else {
+      correct.lastName = true;
+      document.getElementById("lastNameErrorMsg").textContent = "";
+    }
+  });
+
+  address.addEventListener("input", function (e) {
+    let inputValid = addressRegex.test(e.target.value);
+    if (inputValid === false) {
+      document.getElementById("addressErrorMsg").textContent = "Indiquer une adresse valide";
+      correct.address = false;
+    } else {
+      correct.address = true;
+      document.getElementById("addressErrorMsg").textContent = "";
+    }
+  });
+
+  city.addEventListener("input", function (e) {
+    let inputValid = cityRegex.test(e.target.value);
+    if (inputValid === false) {
+      document.getElementById("cityErrorMsg").textContent = "Indiquer une ville valide";
+      correct.city = false;
+    } else {
+      correct.city = true;
+      document.getElementById("cityErrorMsg").textContent = "";
+    }
+  });
+
+  email.addEventListener("input", function (e) {
+    let inputValid = emailRegex.test(e.target.value);
+    if (inputValid === false) {
+      document.getElementById("emailErrorMsg").textContent = "Indiquer une adresse Email valide";
+      correct.email = false;
+    } else {
+      correct.email = true;
+      document.getElementById("emailErrorMsg").textContent = "";
+    }
+  });
+}
+
+
+function sendForm() {
+
+  let pushOrder = document.getElementById("order");
+  console.log(pushOrder);
+  pushOrder.addEventListener("click", function (event) {
+    console.log('OK');
+    event.preventDefault();
+    
+    if (correct.firstName == true && correct.lastName == true && correct.address == true && correct.city == true && correct.email == true) {
+
+      // let basket = JSON.parse(localStorage.getItem("basket"));
+      // console.log(basket);
+      // // Creation du array vide
+      // const arrayId = [];
+      // // Boucle for in qui récupère les ID des produit dans mon localStorage et push dans l'array
+      // for (let i in basket) {
+      //   arrayId.push(basket[i].id);
+      //   console.log(basket[i].id);
+      // }
+      let basket= JSON.parse(localStorage.getItem("basket"));
+      const arrayId = [];
+
+      basket.forEach(function (arrayId) {
+        basket.push(arrayId.id);
+        console.log(arrayId.id);
+      })
+
+
+      const dataOrder = {
+        contact: {
+          firstName: firstName.value,
+          lastName: lastName.value,
+          address: address.value,
+          city: city.value,
+          email: email.value,
+        },
+        products: arrayId,
+      }; 
+      console.log(dataOrder);
         
-        
+
+      fetch('http://localhost:3000/api/products/order',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(dataOrder)
+        })
+        .then((res) => res.json())
+        .then(data => { document.location.href = `./confirmation.html?orderId=${data.orderId}`; })
+    } else {
+      alert("Vérifiez le formulaire");
+      event.preventDefault();
+    }
+      
+    })
+}
+
+formValidation();
+sendForm();
+
+      
