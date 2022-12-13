@@ -126,11 +126,13 @@ basket.forEach(function (product, index) {
       });
 
       baliseParagraphDelete.addEventListener('click', function (e) {
-        alert('Ce produit va être supprimé du panier');
-        e.preventDefault();
-        basket.splice(index, 1);
-        setLocalStorage(basket);
-        location.reload();
+        if (window.confirm('Souhaitez vous supprimer cet article ?')) {
+          alert('Ce produit a bien été supprimé du panier');
+          e.preventDefault();
+          basket.splice(index, 1);
+          setLocalStorage(basket);
+          location.reload();
+        }
       });
     })
     .catch(function (error) {
@@ -140,11 +142,11 @@ basket.forEach(function (product, index) {
 
 function emptyBasket() {
   if (basket === null || basket.length === 0) {
-    // console.log(basket);
-    products = 'Le panier est vide !';
+    let noProducts = 'Le panier est vide !';
     let newH2 = document.createElement('h2');
     baliseCartItems.appendChild(newH2);
-    newH2.innerText = products;
+    newH2.innerText = noProducts;
+    newH2.style.textAlign = 'center';
     document.getElementById('totalQuantity').innerText = 0;
     document.getElementById('totalPrice').innerText = 0;
     disableForm();
@@ -155,8 +157,6 @@ function disableForm() {
   const formDisplay = document.querySelector('.cart__order');
   formDisplay.style.display = 'none';
 }
-
-emptyBasket();
 
 function setLocalStorage(newBasket) {
   localStorage.setItem('basket', JSON.stringify(newBasket));
@@ -170,8 +170,8 @@ const email = document.getElementById('email');
 
 const order = document.getElementById('order');
 
-const firstNameRegex = /^[A-Z a-zé]{3,}[-]?[A-Z a-zé]{0,10}$/;
-const lastNameRegex = /^[A-Z a-zé]{3,}[-]?[A-Z a-zé]{0,10}$/;
+const firstNameRegex = /^[A-Z a-zéèàôâ]{3,}[-]?[A-Z a-zéèàôâ]{0,10}$/;
+const lastNameRegex = /^[A-Z a-zéèàôâ]{3,}[-]?[A-Z a-zéèàôâ]{0,10}$/;
 const addressRegex = /^[0-9]{1,3}[a-zA-Z0-9\s\,\''\-]*$/;
 const cityRegex = /^[A-ZÉÀ a-zéèàôâ']{3,15}[-]?[A-ZÉÀ a-zéèàôâ']{0,10}[-]?[A-ZÉÀ a-zéèàôâ']{0,10}$/;
 const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -275,6 +275,7 @@ function sendForm() {
         .then((res) => res.json())
         .then((data) => {
           document.location.href = `./confirmation.html?orderId=${data.orderId}`;
+          console.log(data.orderId);
         });
     } else {
       alert('Vérifiez le formulaire');
@@ -283,5 +284,6 @@ function sendForm() {
   });
 }
 
+emptyBasket();
 formValidation();
 sendForm();

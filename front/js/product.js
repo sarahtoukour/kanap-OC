@@ -40,7 +40,7 @@ button.addEventListener('click', (event) => {
 
   if (color.value === '') {
     alert('Veuillez choisir une couleur');
-  } else if (quantity.value == 0) {
+  } else if (quantity.value <= 0) {
     alert('Quantité minimale : 1');
   } else if (quantity.value > 100) {
     alert('La quantité maximale fixée à 100');
@@ -51,8 +51,10 @@ button.addEventListener('click', (event) => {
       quantity: parseInt(quantity.value),
     };
     console.log(optionsProduct);
-    addBasket(optionsProduct);
-    alert('Le panier a bien été mis à jour');
+    if (window.confirm('Voulez-vous ajouter cet article au panier?')) {
+      addBasket(optionsProduct);
+      alert('Le panier a bien été mis à jour');
+    }
   }
 
   function setBasket(basket) {
