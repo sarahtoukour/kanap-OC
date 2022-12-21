@@ -1,99 +1,93 @@
 document.title = 'Panier';
-let baliseCartItems = document.getElementById('cart__items');
+let cartItems = document.getElementById('cart__items');
+// récupération du local storage
 let basket = JSON.parse(localStorage.getItem('basket') || '[]');
+// création d'un tableau vide
 let products = [];
 
+// boucle qui récupère chaque produit dans le LS
 basket.forEach(function (product, index) {
-  // console.log('forEach');
-  // console.log(basket);
-  // console.log(product);
-
   let id = product.id;
   let color = product.color;
   let quantity = product.quantity;
 
-  // console.log(product.id);
-  // console.log(product.color);
-  // console.log(product.quantity);
-
   fetch('http://localhost:3000/api/products/' + id)
     .then((res) => res.json())
     .then((product) => {
-      // console.log(product);
-
+      // récupération des données de l'article dans la variable productInfo
       const productInfo = { id: id, color: color, quantity: quantity, name: product.name, price: product.price, img: product.imageUrl, alt: product.altTxt };
-
-      // console.log(productInfo);
-      // console.log(product.name);
-
+      // ajout des produits dans le tableau
       products.push(productInfo);
+      // appel de la fonction pour le calcul du prix total
       getTotalPrice();
 
-      let baliseArticle = document.createElement('article');
-      baliseArticle.className = 'cart__item';
-      baliseArticle.setAttribute('data-id', id);
-      baliseArticle.setAttribute('data-color', color);
-      baliseCartItems.appendChild(baliseArticle);
+      // création des éléments html manquants
+      let article = document.createElement('article');
+      article.className = 'cart__item';
+      article.setAttribute('data-id', id);
+      article.setAttribute('data-color', color);
+      cartItems.appendChild(article);
 
-      let baliseDivImg = document.createElement('div');
-      baliseDivImg.className = 'cart__item__img';
-      baliseArticle.appendChild(baliseDivImg);
+      let divImg = document.createElement('div');
+      divImg.className = 'cart__item__img';
+      article.appendChild(divImg);
 
-      let baliseImg = document.createElement('img');
-      baliseImg.setAttribute('src', product.imageUrl);
-      baliseImg.setAttribute('alt', product.altTxt);
-      baliseDivImg.appendChild(baliseImg);
+      let img = document.createElement('img');
+      img.setAttribute('src', product.imageUrl);
+      img.setAttribute('alt', product.altTxt);
+      divImg.appendChild(img);
 
-      let baliseDivContent = document.createElement('div');
-      baliseDivContent.className = 'cart__item__content';
-      baliseArticle.appendChild(baliseDivContent);
+      let divContent = document.createElement('div');
+      divContent.className = 'cart__item__content';
+      article.appendChild(divContent);
 
-      let baliseDivDescription = document.createElement('div');
-      baliseDivDescription.className = 'cart__item__content__description';
-      baliseDivContent.appendChild(baliseDivDescription);
+      let divDescription = document.createElement('div');
+      divDescription.className = 'cart__item__content__description';
+      divContent.appendChild(divDescription);
 
-      let baliseH2 = document.createElement('h2');
-      baliseH2.innerText = product.name;
-      baliseDivDescription.appendChild(baliseH2);
+      let h2 = document.createElement('h2');
+      h2.innerText = product.name;
+      divDescription.appendChild(h2);
 
-      let baliseParagraphColor = document.createElement('p');
-      baliseParagraphColor.innerText = color;
-      baliseDivDescription.appendChild(baliseParagraphColor);
+      let paragraphColor = document.createElement('p');
+      paragraphColor.innerText = color;
+      divDescription.appendChild(paragraphColor);
 
-      let balisePrice = document.createElement('p');
-      balisePrice.innerText = product.price + ' €';
-      baliseDivDescription.appendChild(balisePrice);
+      let price = document.createElement('p');
+      price.innerText = product.price + ' €';
+      divDescription.appendChild(price);
 
-      let baliseDivContentSetting = document.createElement('div');
-      baliseDivContentSetting.className = 'cart__item__content__settings';
-      baliseDivContent.appendChild(baliseDivContentSetting);
+      let divContentSetting = document.createElement('div');
+      divContentSetting.className = 'cart__item__content__settings';
+      divContent.appendChild(divContentSetting);
 
-      let baliseDivQuantity = document.createElement('div');
-      baliseDivQuantity.className = 'cart__item__content__settings__quantity';
-      baliseDivContentSetting.appendChild(baliseDivQuantity);
+      let divQuantity = document.createElement('div');
+      divQuantity.className = 'cart__item__content__settings__quantity';
+      divContentSetting.appendChild(divQuantity);
 
-      let baliseParagraphQuantity = document.createElement('p');
-      baliseParagraphQuantity.innerText = 'Qté : ';
-      baliseDivQuantity.appendChild(baliseParagraphQuantity);
+      let paragraphQuantity = document.createElement('p');
+      paragraphQuantity.innerText = 'Qté : ';
+      divQuantity.appendChild(paragraphQuantity);
 
-      let baliseInputQuantity = document.createElement('input');
-      baliseInputQuantity.className = 'itemQuantity';
-      baliseInputQuantity.setAttribute('type', 'number');
-      baliseInputQuantity.setAttribute('name', 'itemQuantity');
-      baliseInputQuantity.setAttribute('min', '1');
-      baliseInputQuantity.setAttribute('max', '100');
-      baliseInputQuantity.setAttribute('value', quantity);
-      baliseDivQuantity.appendChild(baliseInputQuantity);
+      let inputQuantity = document.createElement('input');
+      inputQuantity.className = 'itemQuantity';
+      inputQuantity.setAttribute('type', 'number');
+      inputQuantity.setAttribute('name', 'itemQuantity');
+      inputQuantity.setAttribute('min', '1');
+      inputQuantity.setAttribute('max', '100');
+      inputQuantity.setAttribute('value', quantity);
+      divQuantity.appendChild(inputQuantity);
 
-      let baliseDivDelete = document.createElement('div');
-      baliseDivDelete.className = 'cart__item__content__settings__delete';
-      baliseDivContentSetting.appendChild(baliseDivDelete);
+      let divDelete = document.createElement('div');
+      divDelete.className = 'cart__item__content__settings__delete';
+      divContentSetting.appendChild(divDelete);
 
-      let baliseParagraphDelete = document.createElement('p');
-      baliseParagraphDelete.className = 'deleteItem';
-      baliseParagraphDelete.innerText = 'Supprimer';
-      baliseDivDelete.appendChild(baliseParagraphDelete);
+      let paragraphDelete = document.createElement('p');
+      paragraphDelete.className = 'deleteItem';
+      paragraphDelete.innerText = 'Supprimer';
+      divDelete.appendChild(paragraphDelete);
 
+      // calcul du total pour la quantité et le prix
       function getTotalPrice() {
         let totalPrice = 0;
         let totalQuantity = 0;
@@ -102,30 +96,29 @@ basket.forEach(function (product, index) {
 
         products.forEach(function (product) {
           totalPrice += product.price * product.quantity;
-          // console.log(totalPrice);
           totalQuantity += product.quantity;
-          // console.log(totalQuantity);
         });
 
         totalPriceDisplay.innerText = totalPrice;
         totalQuantityDisplay.innerText = totalQuantity;
       }
 
-      baliseInputQuantity.addEventListener('change', function () {
-        let newValue = baliseInputQuantity.value;
+      // modification de la quantité d'un produit
+      inputQuantity.addEventListener('change', function () {
+        let newValue = inputQuantity.value;
 
         if (newValue <= 0 || newValue > 100 || isNaN(quantity)) {
           alert('Merci de sélectionner une quantité valide.');
         } else {
           basket[index].quantity = parseInt(newValue);
           getTotalPrice();
-          // console.log(newValue);
           setLocalStorage(basket);
           location.reload();
         }
       });
 
-      baliseParagraphDelete.addEventListener('click', function (e) {
+      // suppression d'un produit
+      paragraphDelete.addEventListener('click', function (e) {
         if (window.confirm('Souhaitez vous supprimer cet article ?')) {
           alert('Ce produit a bien été supprimé du panier');
           e.preventDefault();
@@ -140,42 +133,48 @@ basket.forEach(function (product, index) {
     });
 });
 
+// affichage de la mention "panier vide" et masquer le formulaire
 function emptyBasket() {
   if (basket === null || basket.length === 0) {
-    let noProducts = 'Le panier est vide !';
-    let newH2 = document.createElement('h2');
-    baliseCartItems.appendChild(newH2);
-    newH2.innerText = noProducts;
-    newH2.style.textAlign = 'center';
+    // let noProducts = 'Le panier est vide !';
+    // let newH2 = document.createElement('h2');
+    // cartItems.appendChild(newH2);
+    // newH2.innerText = noProducts;
+    // newH2.style.textAlign = 'center';
+    document.querySelector('h1').innerHTML = 'Votre panier est vide';
     document.getElementById('totalQuantity').innerText = 0;
     document.getElementById('totalPrice').innerText = 0;
     disableForm();
   }
 }
 
+// Formulaire masqué
 function disableForm() {
   const formDisplay = document.querySelector('.cart__order');
   formDisplay.style.display = 'none';
 }
 
+// enregistrement du panier dans le LS
 function setLocalStorage(newBasket) {
   localStorage.setItem('basket', JSON.stringify(newBasket));
 }
 
+// récupération des id du formulaire de commande dans des variables
 const firstName = document.getElementById('firstName');
 const lastName = document.getElementById('lastName');
 const address = document.getElementById('address');
 const city = document.getElementById('city');
 const email = document.getElementById('email');
-
 const order = document.getElementById('order');
 
+// création des regex pour validation du formulaire
 const firstNameRegex = /^[A-Z a-zéèàôâ]{3,}[-]?[A-Z a-zéèàôâ]{0,10}$/;
 const lastNameRegex = /^[A-Z a-zéèàôâ]{3,}[-]?[A-Z a-zéèàôâ]{0,10}$/;
 const addressRegex = /^[0-9]{1,3}[a-zA-Z0-9\s\,\''\-]*$/;
 const cityRegex = /^[A-ZÉÀ a-zéèàôâ']{3,15}[-]?[A-ZÉÀ a-zéèàôâ']{0,10}[-]?[A-ZÉÀ a-zéèàôâ']{0,10}$/;
 const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
+// création variable témoin
 let correct = {
   firstName: false,
   lastName: false,
@@ -184,7 +183,9 @@ let correct = {
   email: false,
 };
 
+// fonctions qui vérifient la validité de saisie des input
 function formValidation() {
+  // vérif du prénom
   firstName.addEventListener('input', function (e) {
     let inputValid = firstNameRegex.test(e.target.value);
     if (inputValid === false) {
@@ -196,6 +197,7 @@ function formValidation() {
     }
   });
 
+  // vérif du nom
   lastName.addEventListener('input', function (e) {
     let inputValid = lastNameRegex.test(e.target.value);
     if (inputValid === false) {
@@ -207,6 +209,7 @@ function formValidation() {
     }
   });
 
+  // vérif de l'adresse
   address.addEventListener('input', function (e) {
     let inputValid = addressRegex.test(e.target.value);
     if (inputValid === false) {
@@ -218,6 +221,7 @@ function formValidation() {
     }
   });
 
+  // vérif de la ville
   city.addEventListener('input', function (e) {
     let inputValid = cityRegex.test(e.target.value);
     if (inputValid === false) {
@@ -229,6 +233,7 @@ function formValidation() {
     }
   });
 
+  // vérif du mail
   email.addEventListener('input', function (e) {
     let inputValid = emailRegex.test(e.target.value);
     if (inputValid === false) {
@@ -241,20 +246,24 @@ function formValidation() {
   });
 }
 
+// envoi du formulaire de commande
 function sendForm() {
   let pushOrder = document.getElementById('order');
   pushOrder.addEventListener('click', function (event) {
     event.preventDefault();
 
+    // si les saisies sont ok
     if (correct.firstName == true && correct.lastName == true && correct.address == true && correct.city == true && correct.email == true) {
+      // on récupére le contenu du LS
       let basket = JSON.parse(localStorage.getItem('basket'));
+      // on déclare en tableau la variable arrayId
       const arrayId = [];
-
+      // boucle qui récupère les ID des produits dans le LS et les push dans l'array
       basket.forEach(function (arrayId) {
         basket.push(arrayId.id);
-        console.log(arrayId.id);
       });
 
+      // récupération des données saisies du formulaire + les prosuits dans l'objet dataOrder
       const dataOrder = {
         contact: {
           firstName: firstName.value,
@@ -265,8 +274,8 @@ function sendForm() {
         },
         products: arrayId,
       };
-      // console.log(dataOrder);
 
+      // envoi requête POST avec l'objet dataOrder comme paramètre
       fetch('http://localhost:3000/api/products/order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -274,9 +283,11 @@ function sendForm() {
       })
         .then((res) => res.json())
         .then((data) => {
+          // renvoi vers la page de confirmation
           document.location.href = `./confirmation.html?orderId=${data.orderId}`;
-          console.log(data.orderId);
         });
+
+      // sinon affiche un message d'alerte
     } else {
       alert('Vérifiez le formulaire');
       event.preventDefault();
@@ -284,6 +295,7 @@ function sendForm() {
   });
 }
 
+// appel des fonctions
 emptyBasket();
 formValidation();
 sendForm();

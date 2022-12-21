@@ -1,34 +1,36 @@
-var baliseItems = document.querySelector('#items');
+// récupération de la balise parent
+let items = document.querySelector('#items');
 
+// méthode fetch => requête auprès de l'API pour récupérer l'ensemble des produits
+// conversion au format JSON (forme textuelle et structurée)
+// promesse avec pour paramètre products pour l'ensemble des produits
 fetch('http://localhost:3000/api/products')
   .then((res) => res.json())
   .then((products) => {
-    // console.log(products);
-
+    // boucle qui récupère chaque produit
     products.forEach((product) => {
-      // console.log(product);
+      // création des éléments html
+      let a = document.createElement('a');
+      a.setAttribute('href', `./product.html?id=${product._id}`);
+      items.appendChild(a);
 
-      let baliseA = document.createElement('a');
-      baliseA.setAttribute('href', `./product.html?id=${product._id}`);
-      baliseItems.appendChild(baliseA);
+      let article = document.createElement('article');
+      a.appendChild(article);
 
-      let baliseArticle = document.createElement('article');
-      baliseA.appendChild(baliseArticle);
+      let img = document.createElement('img');
+      img.setAttribute('src', product.imageUrl);
+      img.setAttribute('alt', product.altTxt);
+      article.appendChild(img);
 
-      let baliseImg = document.createElement('img');
-      baliseImg.setAttribute('src', product.imageUrl);
-      baliseImg.setAttribute('alt', product.altTxt);
-      baliseArticle.appendChild(baliseImg);
+      let h3 = document.createElement('h3');
+      h3.setAttribute('class', 'productName');
+      h3.innerText = product.name;
+      article.appendChild(h3);
 
-      let baliseH3 = document.createElement('h3');
-      baliseH3.setAttribute('class', 'productName');
-      baliseH3.innerText = product.name;
-      baliseArticle.appendChild(baliseH3);
-
-      let baliseP = document.createElement('p');
-      baliseP.setAttribute('class', 'productDescription');
-      baliseP.innerText = product.description;
-      baliseArticle.appendChild(baliseP);
+      let p = document.createElement('p');
+      p.setAttribute('class', 'productDescription');
+      p.innerText = product.description;
+      article.appendChild(p);
     });
   })
   .catch((error) => {
