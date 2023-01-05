@@ -6,7 +6,7 @@ let basket = JSON.parse(localStorage.getItem('basket') || '[]');
 let products = [];
 
 // boucle qui récupère chaque produit dans le LS
-basket.forEach(function (product, index) {
+basket.forEach((product, index) => {
   let id = product.id;
   let color = product.color;
   let quantity = product.quantity;
@@ -94,7 +94,7 @@ basket.forEach(function (product, index) {
         let totalQuantityDisplay = document.getElementById('totalQuantity');
         let totalPriceDisplay = document.getElementById('totalPrice');
 
-        products.forEach(function (product) {
+        products.forEach((product) => {
           totalPrice += product.price * product.quantity;
           totalQuantity += product.quantity;
         });
@@ -104,7 +104,7 @@ basket.forEach(function (product, index) {
       }
 
       // modification de la quantité d'un produit
-      inputQuantity.addEventListener('change', function () {
+      inputQuantity.addEventListener('change', () => {
         let newValue = inputQuantity.value;
 
         if (newValue <= 0 || newValue > 100 || isNaN(quantity)) {
@@ -118,7 +118,7 @@ basket.forEach(function (product, index) {
       });
 
       // suppression d'un produit
-      paragraphDelete.addEventListener('click', function (e) {
+      paragraphDelete.addEventListener('click', (e) => {
         if (window.confirm('Souhaitez vous supprimer cet article ?')) {
           alert('Ce produit a bien été supprimé du panier');
           e.preventDefault();
@@ -136,11 +136,6 @@ basket.forEach(function (product, index) {
 // affichage de la mention "panier vide" et masquer le formulaire
 function emptyBasket() {
   if (basket === null || basket.length === 0) {
-    // let noProducts = 'Le panier est vide !';
-    // let newH2 = document.createElement('h2');
-    // cartItems.appendChild(newH2);
-    // newH2.innerText = noProducts;
-    // newH2.style.textAlign = 'center';
     document.querySelector('h1').innerHTML = 'Votre panier est vide';
     document.getElementById('totalQuantity').innerText = 0;
     document.getElementById('totalPrice').innerText = 0;
@@ -186,7 +181,7 @@ let correct = {
 // fonctions qui vérifient la validité de saisie des input
 function formValidation() {
   // vérif du prénom
-  firstName.addEventListener('input', function (e) {
+  firstName.addEventListener('input', (e) => {
     let inputValid = firstNameRegex.test(e.target.value);
     if (inputValid === false) {
       document.getElementById('firstNameErrorMsg').textContent = 'Format incorrect';
@@ -198,7 +193,7 @@ function formValidation() {
   });
 
   // vérif du nom
-  lastName.addEventListener('input', function (e) {
+  lastName.addEventListener('input', (e) => {
     let inputValid = lastNameRegex.test(e.target.value);
     if (inputValid === false) {
       document.getElementById('lastNameErrorMsg').textContent = 'Format incorrect';
@@ -210,7 +205,7 @@ function formValidation() {
   });
 
   // vérif de l'adresse
-  address.addEventListener('input', function (e) {
+  address.addEventListener('input', (e) => {
     let inputValid = addressRegex.test(e.target.value);
     if (inputValid === false) {
       document.getElementById('addressErrorMsg').textContent = 'Format incorrect';
@@ -222,7 +217,7 @@ function formValidation() {
   });
 
   // vérif de la ville
-  city.addEventListener('input', function (e) {
+  city.addEventListener('input', (e) => {
     let inputValid = cityRegex.test(e.target.value);
     if (inputValid === false) {
       document.getElementById('cityErrorMsg').textContent = 'Format incorrect';
@@ -234,7 +229,7 @@ function formValidation() {
   });
 
   // vérif du mail
-  email.addEventListener('input', function (e) {
+  email.addEventListener('input', (e) => {
     let inputValid = emailRegex.test(e.target.value);
     if (inputValid === false) {
       document.getElementById('emailErrorMsg').textContent = 'Adresse Email non valide';
@@ -249,7 +244,7 @@ function formValidation() {
 // envoi du formulaire de commande
 function sendForm() {
   let pushOrder = document.getElementById('order');
-  pushOrder.addEventListener('click', function (event) {
+  pushOrder.addEventListener('click', (event) => {
     event.preventDefault();
 
     // si les saisies sont ok
@@ -259,11 +254,11 @@ function sendForm() {
       // on déclare en tableau la variable arrayId
       const arrayId = [];
       // boucle qui récupère les ID des produits dans le LS et les push dans l'array
-      basket.forEach(function (arrayId) {
+      basket.forEach((arrayId) => {
         basket.push(arrayId.id);
       });
 
-      // récupération des données saisies du formulaire + les prosuits dans l'objet dataOrder
+      // récupération des données saisies du formulaire + les produits dans l'objet dataOrder
       const dataOrder = {
         contact: {
           firstName: firstName.value,

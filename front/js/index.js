@@ -1,5 +1,5 @@
 // récupération de la balise parent
-let items = document.querySelector('#items');
+let items = document.getElementById('items');
 
 // méthode fetch => requête auprès de l'API pour récupérer l'ensemble des produits
 // conversion au format JSON (forme textuelle et structurée)

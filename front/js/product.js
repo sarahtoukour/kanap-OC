@@ -5,8 +5,12 @@ let price = document.getElementById('price');
 let description = document.getElementById('description');
 let colorsTag = document.getElementById('colors');
 
+const button = document.getElementById('addToCart');
+const color = document.getElementById('colors');
+const quantity = document.getElementById('quantity');
+
 // récupération de l'id avec les paramètres de l'url
-const url = new URLSearchParams(window.location.search);
+const url = new URLSearchParams(window.location.search); //new initialise un objet = url
 const id = url.get('id');
 
 console.log("Récupération de l'id :" + id);
@@ -38,11 +42,6 @@ fetch('http://localhost:3000/api/products/' + id)
     console.error(error);
   });
 
-// récupération des id du HTML
-const button = document.querySelector('#addToCart');
-const color = document.querySelector('#colors');
-const quantity = document.querySelector('#quantity');
-
 // détection de l'évènement au clic sur le bouton commander
 button.addEventListener('click', (event) => {
   event.preventDefault();
@@ -53,7 +52,7 @@ button.addEventListener('click', (event) => {
   } else if (quantity.value <= 0) {
     alert('Quantité minimale : 1');
   } else if (quantity.value > 100) {
-    alert('La quantité maximale est fixée à 100');
+    alert('La quantité maximale : 100');
   } else if (quantity.value > 0 && quantity.value < 100) {
     //si conditions respectées alors un nouvel objet est créé avec les 3 références
     var optionsProduct = {
@@ -63,7 +62,7 @@ button.addEventListener('click', (event) => {
     };
     console.log(optionsProduct);
 
-    // fenêtre d'alerte ajout produit au panier
+    // fenêtre d'alerte et ajout du produit au panier
     if (window.confirm('Voulez-vous ajouter cet article au panier?')) {
       addBasket(optionsProduct);
       alert('Le panier a bien été mis à jour');
@@ -91,14 +90,14 @@ button.addEventListener('click', (event) => {
     let proceed = false;
 
     // boucle avec conditions pour incrémenter uniquement la quantité si le produit est déjà dans le local storage
-    basket.forEach(function (oneProduct, index) {
+    basket.forEach((oneProduct, index) => {
       // si l'article existe déjà avec même id et même couleur alors on incrémente uniquement la quantité dans le panier
       if (oneProduct.id == optionsProduct.id && oneProduct.color == optionsProduct.color) {
         basket[index].quantity = parseInt(basket[index].quantity) + parseInt(optionsProduct.quantity);
         // on réactualise le panier dans le LS avec la fonction setBasket
         setBasket(basket);
-        // variable témoin à true = article identique donc pas besoin du 2ème if
-        proceed == true;
+        // variable témoin à true : article identique donc pas besoin du 2ème if
+        proceed = true;
       }
     });
     // si variable témoin = false, on a pas trouvé d'article au même id alors on push nouvel article dans le panier (basket) et on actualise le panier avec la fonction setBasket
