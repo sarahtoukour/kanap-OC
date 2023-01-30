@@ -4,5 +4,5 @@ const numberOrder = new URL(location.href).searchParams.get('orderId');
 // affichage du numéro de commande
 document.getElementById('orderId').textContent = numberOrder;
 
-// suppression du local storage une fois la commande finalisée
+// suppression du LS une fois la commande finalisée
 localStorage.removeItem('basket');

@@ -1,6 +1,6 @@
 document.title = 'Panier';
 let cartItems = document.getElementById('cart__items');
-// récupération du local storage
+// récupération du LS
 let basket = JSON.parse(localStorage.getItem('basket') || '[]');
 // création d'un tableau vide
 let products = [];
@@ -258,7 +258,7 @@ function sendForm() {
         basket.push(arrayId.id);
       });
 
-      // récupération des données saisies du formulaire + les produits dans l'objet dataOrder
+      // récupération des données saisies dans le formulaire + les produits dans l'objet dataOrder
       const dataOrder = {
         contact: {
           firstName: firstName.value,

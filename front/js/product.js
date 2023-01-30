@@ -10,7 +10,7 @@ const color = document.getElementById('colors');
 const quantity = document.getElementById('quantity');
 
 // récupération de l'id avec les paramètres de l'url
-const url = new URLSearchParams(window.location.search); //new initialise un objet = url
+const url = new URLSearchParams(window.location.search); // new initialise un objet = url
 const id = url.get('id');
 
 console.log("Récupération de l'id :" + id);
@@ -52,10 +52,10 @@ button.addEventListener('click', (event) => {
   } else if (quantity.value <= 0) {
     alert('Quantité minimale : 1');
   } else if (quantity.value > 100) {
-    alert('La quantité maximale : 100');
+    alert('Quantité maximale : 100');
   } else if (quantity.value > 0 && quantity.value < 100) {
     //si conditions respectées alors un nouvel objet est créé avec les 3 références
-    var optionsProduct = {
+    const optionsProduct = {
       id: id,
       color: color.value,
       quantity: parseInt(quantity.value), // parseInt = conversion d'une chaîne de caractères en nombre entier
@@ -69,16 +69,16 @@ button.addEventListener('click', (event) => {
     }
   }
 
-  // enregistrement du panier dans le local storage
+  // enregistrement du panier dans le LS
   function setBasket(basket) {
     localStorage.setItem('basket', JSON.stringify(basket)); // stringify = convertit en JSON
   }
 
-  // récupération du contenu du local storage
+  // récupération du contenu du LS
   function getBasket() {
     let basket = localStorage.getItem('basket');
     if (basket == null) {
-      // si le local storage est vide, on crée un tableau vide
+      // si le LS est vide, on crée un tableau vide
       return [];
     } else {
       return JSON.parse(basket); // parse = sous forme d'objet JS
@@ -89,7 +89,7 @@ button.addEventListener('click', (event) => {
     let basket = getBasket();
     let proceed = false;
 
-    // boucle avec conditions pour incrémenter uniquement la quantité si le produit est déjà dans le local storage
+    // boucle avec conditions pour incrémenter uniquement la quantité si le produit est déjà dans le LS
     basket.forEach((oneProduct, index) => {
       // si l'article existe déjà avec même id et même couleur alors on incrémente uniquement la quantité dans le panier
       if (oneProduct.id == optionsProduct.id && oneProduct.color == optionsProduct.color) {
