@@ -136,7 +136,7 @@ basket.forEach((product, index) => {
 // affichage de la mention "panier vide" et masquer le formulaire
 function emptyBasket() {
   if (basket === null || basket.length === 0) {
-    document.querySelector('h1').innerHTML = 'Votre panier est vide';
+    document.querySelector('h1').textContent = 'Votre panier est vide';
     document.getElementById('totalQuantity').innerText = 0;
     document.getElementById('totalPrice').innerText = 0;
     disableForm();
